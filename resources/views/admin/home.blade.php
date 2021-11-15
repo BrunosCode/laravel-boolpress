@@ -15,7 +15,7 @@
                     @endif
                     
                     <ul>
-                        <li><a href="{{ route("admin.posts.index") }}"></a></li>
+                        <li><a href="{{ route("admin.posts.index") }}">Post index</a></li>
                     </ul>
                     
                 </div>

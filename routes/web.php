@@ -20,7 +20,7 @@ Route::get('/', 'PageController@index');
 Auth::routes();
 
 // Admin routes
-Route::middleware("auth")->namespace("Admin")->name("Admin.")->prefix("admin")->group(function() {
+Route::middleware("auth")->namespace("Admin")->name("admin.")->prefix("admin")->group(function() {
 
     Route::get('/home', 'HomeController@index')->name('home');
     Route::resource("posts", "PostController");
