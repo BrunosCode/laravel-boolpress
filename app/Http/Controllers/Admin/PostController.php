@@ -9,6 +9,11 @@ use App\Post;
 
 class PostController extends Controller
 {
+    protected $validationRules = [
+        'title' => 'string|required|max:100',
+        'content' => 'string|required'
+    ];
+
     /**
      * Display a listing of the resource.
      *
@@ -39,6 +44,8 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate($this->validationRules);
+
         $newPost = new Post();
         $newPost->fill($request->all());
        
@@ -80,6 +87,8 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
+        $request->validate($this->validationRules);
+        
         if($post->title != $request->title) {
             $post->slug = $this->getSlug($request->title);
         }
