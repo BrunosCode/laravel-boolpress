@@ -14,9 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Public routes
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'PageController@index');
 
 // Auth routes
 Auth::routes();
