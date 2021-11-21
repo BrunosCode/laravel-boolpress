@@ -20,9 +20,9 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $category = Category::all();
+        $categories = Category::all();
 
-        return view("admin.posts.index", compact("category"));
+        return view("admin.categories.index", compact("categories"));
     }
 
     /**
@@ -32,7 +32,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.categories.create');
     }
 
     /**
@@ -43,7 +43,16 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate($this->validationRules);
+
+        $newCategory = new Category();
+        $newCategory->fill($request->all());
+       
+        $newCategory->slug = $this->getSlug($request->title);
+
+        $newCategory->save();
+
+        return redirect()->route("admin.categories.index")->with('success',"You have created a new Category");
     }
 
     /**
@@ -54,7 +63,7 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        return redirect()->route("admin.categories.show", compact("category"));
+        //
     }
 
     /**
@@ -63,9 +72,9 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Category $category)
     {
-        //
+        return view('admin.categories.edit', compact('category'));
     }
 
     /**
@@ -75,9 +84,19 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Category $category)
     {
-        //
+        $request->validate($this->validationRules);
+        
+        if($category->title != $request->title) {
+            $category->slug = $this->getSlug($request->title);
+        }
+
+        $category->fill($request->all());
+
+        $category->save();
+
+        return redirect()->route("admin.categories.index")->with('success',"The post n{$category->id} has been updated");
     }
 
     /**
@@ -86,8 +105,33 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Category $category)
     {
-        //
+        $category->delete();
+
+        return redirect()->route("admin.categories.index")->with('success',"The post {$category->id} has been deleted");
+    }
+
+    /**
+     * getSlug - return a unique slug
+     *
+     * @param  string $title
+     * @return string
+     */
+    private function getSlug($title)
+    {
+        $slug = Str::of($title)->slug('-');
+
+        $categoryExist = Category::where("slug", $slug)->first();
+
+        $count = 2;
+        
+        while($categoryExist) {
+            $slug = Str::of($title)->slug('-') . "-{$count}";
+            $categoryExist = Category::where("slug", $slug)->first();
+            $count++;
+        }
+
+        return $slug;
     }
 }

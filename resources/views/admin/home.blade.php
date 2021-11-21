@@ -17,6 +17,8 @@
                     <ul>
                         <li><a href="{{ route("admin.posts.index") }}">Post index</a></li>
                         <li><a href="{{ route("admin.posts.create") }}">New Post</a></li>
+                        <li><a href="{{ route("admin.categories.index") }}">Categories index</a></li>
+                        <li><a href="{{ route("admin.categories.create") }}">New categories</a></li>
                     </ul>
                     
                 </div>
