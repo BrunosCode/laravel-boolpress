@@ -10,6 +10,7 @@
                     <div class="card-body">
                         <h1>{{ $post["title"] }}</h1>
                         <p>{{ $post["content"] }}</p>
+                        <p>{{ $post["category"]["name"] ?? "No category" }}</p>
                     </div>
                 </div>
             </div>

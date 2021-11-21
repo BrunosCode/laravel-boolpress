@@ -10,7 +10,7 @@ use App\Category;
 class CategoryController extends Controller
 {
     protected $validationRules = [
-        "title" => "string|required|max:100"
+        "title" => "string|required|max:50|unique:categories,title"
     ];
 
     /**

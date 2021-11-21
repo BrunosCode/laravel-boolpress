@@ -29,7 +29,21 @@
                                     <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror
                             </div>
+                            <div class="form-group">
+                                <label for="category">Category</label>
+                                <select name="category_id" class="form-control @error('category_id') is-invalid @enderror">
+                                    <option value="">-- Select a category --</option>
+                                    @foreach ($categories as $category)
+                                    <option {{ old("category_id") == $category["id"] ? 'selected' : null }} value="{{$category["id"]}}">{{$category["title"]}}</option>
+                                    @endforeach
+                                </select>
+                                @error('category_id')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                  @enderror
+                            </div>
+                            
                             <button type="submit" class="btn btn-success">Save</button>
+                            <a href="{{ route('admin.posts.index') }}" class="btn btn-danger">Cancel</a>
                         </form>
                     </div>
                 </div>
