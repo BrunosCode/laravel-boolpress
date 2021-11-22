@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use App\Post;
 use App\Category;
 use App\Tag;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
@@ -25,7 +26,9 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::all();
+        $user = Auth::user();
+
+        $posts = $user["posts"];
 
         return view("admin.posts.index", compact("posts"));
     }
@@ -40,7 +43,7 @@ class PostController extends Controller
         $categories = Category::all();
         $tags = Tag::all();
 
-        return view("admin.posts.create", compact("categories", "tags", "categories"));
+        return view("admin.posts.create", compact("categories", "tags"));
     }
 
     /**
@@ -58,6 +61,8 @@ class PostController extends Controller
        
         $newPost->slug = $this->getSlug($request->title);
 
+        $newPost->user_id = Auth::id();
+
         $newPost->save();
 
         $newPost->tags()->attach($request["tags"]);
@@ -73,6 +78,10 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
+        if ($post->user_id != Auth::id()) {
+            abort("403");
+        }
+
         $category = Category::find($post["category_id"]);
         $tags = Tag::all();
 
@@ -87,6 +96,10 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
+        if ($post->user_id != Auth::id()) {
+            abort("403");
+        }
+
         $categories = Category::all();
         $tags = Tag::all();
 
@@ -102,6 +115,10 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
+        if ($post->user_id != Auth::id()) {
+            abort("403");
+        }
+
         $request->validate($this->validationRules);
         
         if($post->title != $request->title) {
@@ -125,6 +142,10 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        if ($post->user_id != Auth::id()) {
+            abort("403");
+        }
+        
         $post->delete();
 
         return redirect()->route("admin.posts.index")->with('success',"The post {$post->id} has been deleted");
