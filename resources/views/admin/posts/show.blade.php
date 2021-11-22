@@ -10,7 +10,14 @@
                     <div class="card-body">
                         <h1>{{ $post["title"] }}</h1>
                         <p>{{ $post["content"] }}</p>
-                        <p>{{ $post["category"]["name"] ?? "No category" }}</p>
+                        <p>{{ $category["title"] ?? ""}}</p>
+                        <p>@if($post["tags"] && count($post["tags"]) > 0)
+                            @foreach ($post["tags"] as $tag)
+                            <span class="badge badge-primary">{{$tag["name"]}}</span>
+                            @endforeach
+                          @else
+                            <span>No tags</span>
+                          @endif</p>
                     </div>
                 </div>
             </div>

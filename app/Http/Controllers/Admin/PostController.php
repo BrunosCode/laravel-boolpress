@@ -7,13 +7,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Post;
 use App\Category;
+use App\Tag;
 
 class PostController extends Controller
 {
     protected $validationRules = [
         "title" => "string|required|max:100",
         "content" => "string|required",
-        "category_id" => "nullable|exists:categories,id"
+        "category_id" => "nullable|exists:categories,id",
+        'tags' => 'exists:tags,id'
     ];
 
     /**
@@ -36,8 +38,9 @@ class PostController extends Controller
     public function create()
     {
         $categories = Category::all();
+        $tags = Tag::all();
 
-        return view("admin.posts.create", compact("categories"));
+        return view("admin.posts.create", compact("categories", "tags", "categories"));
     }
 
     /**
@@ -46,7 +49,7 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request) 
     {
         $request->validate($this->validationRules);
 
@@ -56,6 +59,8 @@ class PostController extends Controller
         $newPost->slug = $this->getSlug($request->title);
 
         $newPost->save();
+
+        $newPost->tags()->attach($request["tags"]);
 
         return redirect()->route("admin.posts.index")->with("success","You have created a new Post");
     }
@@ -68,7 +73,10 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        return view("admin.posts.show", compact("post"));
+        $category = Category::find($post["category_id"]);
+        $tags = Tag::all();
+
+        return view("admin.posts.show", compact("post", "category"));
     }
 
     /**
@@ -80,8 +88,9 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         $categories = Category::all();
+        $tags = Tag::all();
 
-        return view("admin.posts.edit", compact("post", "categories"));
+        return view("admin.posts.edit", compact("post", "categories", "tags"));
     }
 
     /**
@@ -102,6 +111,8 @@ class PostController extends Controller
         $post->fill($request->all());
 
         $post->save();
+
+        $post->tags()->sync($request->tags);
 
         return redirect()->route("admin.posts.index")->with('success',"The post n{$post->id} has been updated");
     }

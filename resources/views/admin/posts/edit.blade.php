@@ -14,8 +14,7 @@
                             <div class="form-group">
                                 <label for="title">Title</label>
                                 <input type="text" class="form-control @error('title') is-invalid @enderror" name="title"
-                                    id="title" placeholder="Insert Title"
-                                    value="{{ old('title') ?? $post['title'] }}">
+                                    id="title" placeholder="Insert Title" value="{{ old('title') ?? $post['title'] }}">
                                 @error('title')
                                     <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror
@@ -34,14 +33,44 @@
                                 <select name="category_id" class="form-control @error('category_id') is-invalid @enderror">
                                     <option value="">-- Select a category --</option>
                                     @foreach ($categories as $category)
-                                    <option {{ old("category_id") == $category["id"] ? 'selected' : null }} value="{{$category["id"]}}">{{$category["title"]}}</option>
+
+                                        @if ($errors->any())
+                                            <option {{ old('category_id') == $category['id'] ? 'selected' : null }}
+                                                value="{{ $category['id'] }}">{{ $category['title'] }}</option>
+                                        @else
+                                            <option
+                                                {{ isset($post['category']) && $post['category']['id'] == $category['id'] ? 'selected' : null }}
+                                                value="{{ $category['id'] }}">{{ $category['title'] }}</option>
+                                        @endif
+
                                     @endforeach
                                 </select>
                                 @error('category_id')
-                                <div class="alert alert-danger">{{ $message }}</div>
-                                  @enderror
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
                             </div>
-                            
+                            <div class="form-group">
+                                <p>Tags</p>
+                                @foreach ($tags as $tag)
+                                    <div class="custom-control custom-checkbox">
+                                        @if ($errors->any())
+                                            <input {{ in_array($tag['id'], old('tags', [])) ? 'checked' : null }}
+                                                name="tags[]" value="{{ $tag['id'] }}" type="checkbox"
+                                                class="custom-control-input" id="tag-{{ $tag['id'] }}">
+                                        @else
+                                            <input {{ $post['tags']->contains($tag['id']) ? 'checked' : null }}
+                                                name="tags[]" value="{{ $tag['id'] }}" type="checkbox"
+                                                class="custom-control-input" id="tag-{{ $tag['id'] }}">
+                                        @endif
+                                        <label class="custom-control-label"
+                                            for="tag-{{ $tag['id'] }}">{{ $tag['name'] }}</label>
+                                    </div>
+                                @endforeach
+                                @error('tags')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+
                             <button type="submit" class="btn btn-success">Save</button>
                             <a href="{{ route('admin.posts.index') }}" class="btn btn-danger">Cancel</a>
                         </form>
