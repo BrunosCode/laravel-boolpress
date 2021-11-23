@@ -1,20 +1,26 @@
 <template>
-<div>
-    <Header/>
-    <main>
+<div class="front">
+    <Header class="front__header"/>
+    <main class="front__main">
         <router-view></router-view>
     </main>
+    <Sidebar class="front__sidebar" />
+    <Footer class="front__footer" />
 </div>
 
 </template>
 
 <script>
 import Header from "./components/Header.vue";
+import Sidebar from "./components/Sidebar.vue";
+import Footer from "./components/Footer.vue";
 
 export default {
     name: "App",
     components: {
-        Header
+        Header,
+        Sidebar,
+        Footer
     },
     mounted() {
         console.log("Component mounted.");
@@ -22,55 +28,34 @@ export default {
 };
 </script>
 
-<style>
-    html, body {
-        background-color: #fff;
-        color: #636b6f;
-        font-family: 'Nunito', sans-serif;
-        font-weight: 200;
-        height: 100vh;
-        margin: 0;
+<style lang="scss" scoped>
+.front {
+    display: grid;
+    grid-template-rows: 5rem auto 5rem;
+    grid-template-columns: 2fr 1fr;
+    grid-template-areas: 
+    "header header"
+    "main sidebar"
+    "footer footer";
+    min-height: 100vh;
+
+    &__header {
+        grid-area: header;
+        background-color: gray;
     }
 
-    .full-height {
-        height: 100vh;
+    &__main {
+        grid-area: main;
     }
 
-    .flex-center {
-        align-items: center;
-        display: flex;
-        justify-content: center;
+    &__sidebar {
+        background-color: yellow;
+        grid-area: sidebar;
     }
 
-    .position-ref {
-        position: relative;
+    &__footer {
+        grid-area: footer;
+        background-color: gray;
     }
-
-    .top-right {
-        position: absolute;
-        right: 10px;
-        top: 18px;
-    }
-
-    .content {
-        text-align: center;
-    }
-
-    .title {
-        font-size: 84px;
-    }
-
-    .links > a {
-        color: #636b6f;
-        padding: 0 25px;
-        font-size: 13px;
-        font-weight: 600;
-        letter-spacing: .1rem;
-        text-decoration: none;
-        text-transform: uppercase;
-    }
-
-    .m-b-md {
-        margin-bottom: 30px;
-    }
+}
 </style>
