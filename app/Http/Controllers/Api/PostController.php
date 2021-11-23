@@ -9,22 +9,36 @@ use App\Post;
 class PostController extends Controller
 {
     public function index() {
+
+        $posts = Post::all();
+
+        if ($posts) {
+            return response()->json([
+                "success" => true,
+                "data" => $posts
+            ]);
+        } 
+        
         return response()->json([
-            "success" => true,
-            "data" => Post::all()
+            "success" => false,
+            "data" => "No data"
         ]);
     }
 
-    public function show(Post $post) {
+    public function show($slug) {
 
-        if ($post) {
+        $post = Post::where("slug", $slug)->with("category")->with('tags')->first();
+    
+            if ($post) {
+                return response()->json([
+                    "success" => true,
+                    "data" => $post
+                ]);
+            } 
+            
             return response()->json([
-                "success" => true,
-                "data" => $post
+                "success" => false,
+                "data" => "No data"
             ]);
-        } else {
-            abort("404");
-        }
-
     }
 }
