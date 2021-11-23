@@ -14,9 +14,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Public routes
-Route::get('/', 'PageController@index');
-Route::get('/blog', 'PostController@index')->name("posts.index");
-Route::get('/blog/{slug}', 'PostController@show')->name("posts.show");
+// Route::get('/', 'PageController@index');
+// Route::get('/blog', 'PostController@index')->name("posts.index");
+// Route::get('/blog/{slug}', 'PostController@show')->name("posts.show");
 
 
 // Auth routes
@@ -29,3 +29,5 @@ Route::middleware("auth")->namespace("Admin")->name("admin.")->prefix("admin")->
     Route::resource("posts", "PostController");
     Route::resource("categories", "CategoryController");
 });
+
+Route::get('/{any}', 'PageController@index')->where('any', '.*');

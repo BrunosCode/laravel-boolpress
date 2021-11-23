@@ -1,18 +1,9 @@
 <template>
 <div>
     <Header/>
-        <div class="flex-center position-ref full-height">
-                    
-            <div class="content">
-                    <div class="title m-b-md">
-                        Laravel
-                    </div>
-
-                    <div class="links">
-                        <a href="">Blog</a>
-                    </div>
-            </div>
-        </div>
+    <main>
+        <router-view></router-view>
+    </main>
 </div>
 
 </template>
