@@ -1,0 +1,150 @@
+.container {
+    width: 1400px;
+    margin-right: auto;
+    margin-left: auto;
+    overflow: hidden;
+
+    @media screen and (max-width: calc(1464px)) {
+        width: calc(100vw - 4rem);
+    }
+    @media screen and (max-width: calc(664px)) {
+        width: calc(100vw - 2rem);
+    }
+}
+
+// Flex
+.f {
+    &Row {
+        display: flex;
+    }
+    &Col {
+        display: flex;
+        flex-direction: column;
+    }
+    &RowReverse {
+        display: flex;
+        flex-direction: column;
+    }
+    &ColReverse {
+        display: flex;
+        flex-direction: column;
+    }
+
+    &Wrap {
+        flex-wrap: wrap;
+    }
+    &Grow {
+        flex-grow: 1;
+    }
+
+    &Justify {
+        &--center {
+            justify-content: center;
+        }
+        &--right {
+            justify-content: right;
+        }
+        &--left {
+            justify-content: left;
+        }
+        &--spaceBetween {
+            justify-content: space-between;
+        }
+        &--spaceAround {
+            justify-content: space-around;
+        }
+        &--spaceEvenly {
+            justify-content: space-evenly;
+        }
+        &--stretch {
+            justify-content: stretch;
+        }
+    }
+    &Align {
+        &--center {
+            align-items: center;
+        }
+        &--start {
+            align-items: flex-start;
+        }
+        &--end {
+            align-items: flex-end;
+        }
+        &--stretch {
+            align-items: stretch;
+        }
+    }
+}
+
+// Columns width classes
+$columns: 12;
+@for $i from 1 through $columns {
+    .w--#{$i} {
+        width: calc((100% / 12) * $i);
+    }
+}
+
+// Spacing class (I had some fun)
+$spacingSizes: (
+    "0": 0,
+    "1": 0.25rem,
+    "2": 0.5rem,
+    "3": 1rem,
+    "4": 1.5rem,
+    "5": 3rem,
+);
+$spacingProperties: (
+    "m": "margin",
+    "p": "padding",
+);
+$spacingDirections: (
+    "t": "top",
+    "b": "bottom",
+    "r": "right",
+    "l": "left",
+    "y": "",
+    "x": "",
+);
+@each $prop, $property in $spacingProperties {
+    .#{$prop} {
+        @each $siz, $size in $spacingSizes {
+            &--#{$siz} {
+                #{$property}-right: $size;
+                #{$property}-left: $size;
+                #{$property}-top: $size;
+                #{$property}-bottom: $size;
+            }
+            @each $dir, $direction in $spacingDirections {
+                &#{$dir} {
+                    @if $dir == x {
+                        &--#{$siz} {
+                            #{$property}-right: $size;
+                            #{$property}-left: $size;
+                        }
+                    } @else if $dir == y {
+                        &--#{$siz} {
+                            #{$property}-top: $size;
+                            #{$property}-bottom: $size;
+                        }
+                    } @else {
+                        &--#{$siz} {
+                            #{$property}-#{$direction}: $size;
+                        }
+                    }
+                }
+            }
+        }
+        
+        &x--auto {
+            #{$property}-right: auto;
+            #{$property}-left: auto;
+        }
+        &r--auto {
+            #{$property}-right: auto;
+        }
+    
+        &l--auto {
+            #{$property}-left: auto;
+        }
+    }
+}
