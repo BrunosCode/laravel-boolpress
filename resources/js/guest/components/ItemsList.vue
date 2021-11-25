@@ -2,7 +2,7 @@
     <ul class="list">
         <li class="list__item" 
         v-for="item in items" :key="item.id">
-            <router-link class="list__link"
+            <router-link class="link"
             :to="{ name: itemsType, params: { slug: item.slug } }">
                 {{ item.title || item.name }}
             </router-link>

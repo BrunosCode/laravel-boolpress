@@ -1,25 +1,29 @@
 <template>
   <div class="main">
-    <h1>Home</h1>
-    <ItemsList items-type="posts"/>
+    <Hero />
+    <div class="container fRow">
+      <ItemsList items-type="posts" class="w--8 py--3"/>
+      <Sidebar class="w--4 my--4 p--4"/>
+    </div>
   </div>
 </template>
 
 <script>
-import ItemsList from "../components/ItemsList";
-import Sidebar from "../components/ItemsList";
+import ItemsList from "../components/ItemsList"; 
+import Sidebar from "../components/Sidebar";
+import Hero from "../components/Hero";
 
 export default {
   name: "Home",
   components: {
     ItemsList,
-    Sidebar
+    Sidebar,
+    Hero
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.main {
-  margin: 2rem 1rem 2rem 3rem; 
-}
+
+
 </style>
