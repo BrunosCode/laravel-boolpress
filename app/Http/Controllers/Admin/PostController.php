@@ -9,6 +9,7 @@ use App\Post;
 use App\Category;
 use App\Tag;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -16,7 +17,8 @@ class PostController extends Controller
         "title" => "string|required|max:100",
         "content" => "string|required",
         "category_id" => "nullable|exists:categories,id",
-        'tags' => 'exists:tags,id'
+        'tags' => 'exists:tags,id',
+        "image" => "nullable|image|max:200"
     ];
 
     /**
@@ -56,8 +58,18 @@ class PostController extends Controller
     {
         $request->validate($this->validationRules);
 
+        $form_data = $request->all();
+
+        // Store image
+        if (array_key_exists("image", $form_data)) {
+
+            $cover_path = Storage::put("post_covers", $form_data["image"]);
+
+            $form_data["post_cover"] = $cover_path;
+        }
+
         $newPost = new Post();
-        $newPost->fill($request->all());
+        $newPost->fill($form_data);
        
         $newPost->slug = $this->getSlug($request->title);
 

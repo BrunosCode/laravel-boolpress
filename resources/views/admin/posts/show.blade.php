@@ -10,6 +10,7 @@
                     <div class="card-body">
                         <h1>{{ $post["title"] }}</h1>
                         <p>{{ $post["content"] }}</p>
+                        <img src="{{ asset( "storage/" . $post["post_cover"])}}" alt="">
                         <p>{{ $category["title"] ?? ""}}</p>
                         <p>@if($post["tags"] && count($post["tags"]) > 0)
                             @foreach ($post["tags"] as $tag)
