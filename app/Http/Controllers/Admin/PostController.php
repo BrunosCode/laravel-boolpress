@@ -132,12 +132,26 @@ class PostController extends Controller
         }
 
         $request->validate($this->validationRules);
-        
+
+        $form_data = $request->all();
+
+        // Store image
+        if (array_key_exists("image", $form_data)) {
+
+            if ($post->post_cover) {
+                Storage::delete($post->post_cover);
+            }
+
+            $cover_path = Storage::put("post_covers", $form_data["image"]);
+
+            $form_data["post_cover"] = $cover_path;
+        }
+
         if($post->title != $request->title) {
             $post->slug = $this->getSlug($request->title);
         }
 
-        $post->fill($request->all());
+        $post->fill($form_data);
 
         $post->save();
 
@@ -156,6 +170,10 @@ class PostController extends Controller
     {
         if ($post->user_id != Auth::id()) {
             abort("403");
+        }
+
+        if ($post->post_cover) {
+            Storage::delete($post->post_cover);
         }
         
         $post->delete();

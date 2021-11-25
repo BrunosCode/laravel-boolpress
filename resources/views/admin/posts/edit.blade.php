@@ -8,7 +8,7 @@
                     <div class="card-header">Edit your post</div>
 
                     <div class="card-body">
-                        <form action="{{ route('admin.posts.update', $post['id']) }}" method="POST">
+                        <form action="{{ route('admin.posts.update', $post['id']) }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             @method("PUT")
                             <div class="form-group">
@@ -28,6 +28,17 @@
                                     <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror
                             </div>
+
+                            <div class="form-group">
+                                <label for="title">Cover Img</label>
+                                <img src="{{ asset( "storage/" . $post["post_cover"] ) }}" alt="{{ $post["title"] }}">
+                                <input type="file" class="form-control @error("image") is-invalid @enderror" name="image"
+                                    id="image">
+                                @error('image')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+
                             <div class="form-group">
                                 <label for="category">Category</label>
                                 <select name="category_id" class="form-control @error('category_id') is-invalid @enderror">
